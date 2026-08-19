@@ -1,6 +1,34 @@
-/* app.js - strict reference visual integration for Kesariya Saree Showroom */
+/* app.js - strict reference visual integration and Firebase Auth for Kesariya Saree Showroom */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Firebase Configuration & Initialization ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyDTVaNtEa_B82yoHNAEXRjmFDiJxpUK40w",
+    authDomain: "kesariya-saree.firebaseapp.com",
+    projectId: "kesariya-saree",
+    storageBucket: "kesariya-saree.firebasestorage.app",
+    messagingSenderId: "708874732554",
+    appId: "1:708874732554:web:1c2e72ba49249dbbfc4bf3",
+    measurementId: "G-YQ1X1XCKGR"
+  };
+
+  let auth = null;
+  let firebaseLoaded = false;
+
+  // Safe Firebase Initialization to prevent crashes if CDN is blocked (e.g. by adblockers/offline)
+  if (typeof firebase !== 'undefined') {
+    try {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      firebaseLoaded = true;
+      console.log('Firebase initialized successfully.');
+    } catch (err) {
+      console.error('Firebase initialization error:', err);
+    }
+  } else {
+    console.warn('Firebase SDK not found. Authentication features will run in offline mode.');
+  }
+
   // --- Navigation & Mobile Menu ---
   const header = document.getElementById('main-header');
   const menuBtn = document.getElementById('menu-btn');
@@ -63,6 +91,210 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // --- Firebase Authentication Modal Logic ---
+  const profileBtn = document.getElementById('profile-btn');
+  const profileIcon = document.getElementById('profile-icon');
+  const authOverlay = document.getElementById('auth-overlay');
+  const closeAuthBtn = document.getElementById('close-auth');
+  
+  const loginView = document.getElementById('auth-login-view');
+  const signupView = document.getElementById('auth-signup-view');
+  const profileView = document.getElementById('auth-profile-view');
+  
+  const loginError = document.getElementById('login-error');
+  const signupError = document.getElementById('signup-error');
+  
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+  
+  const goToSignup = document.getElementById('go-to-signup');
+  const goToLogin = document.getElementById('go-to-login');
+  
+  const googleLoginBtn = document.getElementById('google-login-btn');
+  const googleSignupBtn = document.getElementById('google-signup-btn');
+  const logoutBtn = document.getElementById('auth-logout-btn');
+  const profileEmailDisplay = document.getElementById('profile-email-display');
+
+  let currentUser = null;
+
+  // Toggle Auth modal
+  const openAuthModal = (open) => {
+    console.log('openAuthModal called with state:', open);
+    if (open) {
+      authOverlay.classList.remove('hidden');
+      // trigger reflow for smooth animation
+      authOverlay.offsetHeight;
+      authOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      resetErrors();
+      
+      // Fallback display if Firebase fails to load
+      if (!firebaseLoaded) {
+        loginView.classList.add('hidden');
+        signupView.classList.add('hidden');
+        profileView.classList.remove('hidden');
+        profileEmailDisplay.innerHTML = `
+          <div class="text-red-500 font-bold text-xs flex flex-col items-center space-y-2">
+            <i class="fa-solid fa-circle-exclamation text-3xl"></i>
+            <span>AUTHENTICATION OFFLINE</span>
+          </div>
+          <span class="block text-[11px] text-charcoal-light mt-3 leading-relaxed">
+            The authentication service could not be contacted. Please disable ad-blockers (which often block Firebase CDNs) or check your network connection.
+          </span>
+        `;
+        logoutBtn.classList.add('hidden');
+        return;
+      }
+
+      // Select appropriate initial view
+      if (currentUser) {
+        showView('profile');
+      } else {
+        showView('login');
+      }
+    } else {
+      authOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        if (!authOverlay.classList.contains('open')) {
+          authOverlay.classList.add('hidden');
+        }
+      }, 250);
+    }
+  };
+
+  const showView = (viewName) => {
+    loginView.classList.add('hidden');
+    signupView.classList.add('hidden');
+    profileView.classList.add('hidden');
+
+    if (viewName === 'login') {
+      loginView.classList.remove('hidden');
+    } else if (viewName === 'signup') {
+      signupView.classList.remove('hidden');
+    } else if (viewName === 'profile') {
+      profileView.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
+      if (currentUser) {
+        profileEmailDisplay.textContent = currentUser.email;
+      }
+    }
+  };
+
+  const resetErrors = () => {
+    loginError.classList.add('hidden');
+    loginError.textContent = '';
+    signupError.classList.add('hidden');
+    signupError.textContent = '';
+  };
+
+  console.log('Binding profileBtn click listener...');
+  profileBtn.addEventListener('click', () => {
+    console.log('Profile button clicked! Opening modal...');
+    openAuthModal(true);
+  });
+  closeAuthBtn.addEventListener('click', () => {
+    console.log('Close button clicked! Closing modal...');
+    openAuthModal(false);
+  });
+  authOverlay.addEventListener('click', (e) => {
+    if (e.target === authOverlay) {
+      console.log('Overlay clicked! Closing modal...');
+      openAuthModal(false);
+    }
+  });
+
+  goToSignup.addEventListener('click', () => showView('signup'));
+  goToLogin.addEventListener('click', () => showView('login'));
+
+  // Auth state changed listener
+  if (firebaseLoaded && auth) {
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      if (user) {
+        // User is logged in
+        profileIcon.className = 'fa-solid fa-user text-pink'; // Fill pink profile icon
+        
+        // Prefill contact form name if exists
+        const formName = document.getElementById('form-name');
+        if (formName && !formName.value) {
+          formName.value = user.displayName || user.email.split('@')[0];
+        }
+      } else {
+        // User is logged out
+        profileIcon.className = 'fa-regular fa-user'; // Outline icon
+      }
+    });
+
+    // Action: Email/Password login
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resetErrors();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        openAuthModal(false);
+        loginForm.reset();
+      } catch (err) {
+        loginError.textContent = err.message;
+        loginError.classList.remove('hidden');
+      }
+    });
+
+    // Action: Email/Password registration
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resetErrors();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+      if (password !== confirmPassword) {
+        signupError.textContent = "Passwords do not match.";
+        signupError.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        await auth.createUserWithEmailAndPassword(email, password);
+        openAuthModal(false);
+        signupForm.reset();
+      } catch (err) {
+        signupError.textContent = err.message;
+        signupError.classList.remove('hidden');
+      }
+    });
+
+    // Google OAuth sign-in triggers
+    const handleGoogleSignIn = async () => {
+      resetErrors();
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithPopup(provider);
+        openAuthModal(false);
+      } catch (err) {
+        const activeError = !signupView.classList.contains('hidden') ? signupError : loginError;
+        activeError.textContent = err.message;
+        activeError.classList.remove('hidden');
+      }
+    };
+
+    googleLoginBtn.addEventListener('click', handleGoogleSignIn);
+    googleSignupBtn.addEventListener('click', handleGoogleSignIn);
+
+    // Action: Logout
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await auth.signOut();
+        openAuthModal(false);
+      } catch (err) {
+        alert("Error logging out: " + err.message);
+      }
+    });
+  }
 
   // --- Search UI & Filter Logic ---
   const searchBtn = document.getElementById('search-btn');

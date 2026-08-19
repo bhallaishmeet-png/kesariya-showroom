@@ -19,17 +19,17 @@
           colors: {
             pink: {
               light: '#f783ac',
-              DEFAULT: '#eb1472', /* Signature reference website pink */
+              DEFAULT: '#eb1472', /* Exact hot pink signature accent */
               dark: '#c20e5d',
             },
             charcoal: {
-              light: '#5a5a5a',
-              DEFAULT: '#121212', /* Shopify Dawn theme standard near-black text */
+              light: 'rgba(18, 18, 18, 0.75)', /* Dawn theme body text */
+              DEFAULT: '#121212', /* Dawn theme title text */
               dark: '#000000',
             },
             gray: {
               light: '#f9f9f9',
-              DEFAULT: '#f3f3f3', /* Shopify Dawn theme secondary gray backgrounds */
+              DEFAULT: '#f3f3f3', /* Alternate background gray */
               dark: '#e5e5e5',
             }
           },
@@ -42,7 +42,7 @@
   </script>
   
   <!-- Custom Styles CSS -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1.2">
   
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -92,36 +92,37 @@
     }
   </script>
 </head>
-<body class="bg-white text-charcoal font-sans flex flex-col min-h-screen antialiased">
+<body class="bg-white text-charcoal-light font-sans flex flex-col min-h-screen antialiased">
 
   <!-- 1. ANNOUNCEMENT BAR -->
-  <div class="bg-pink text-white py-2 text-center text-xs font-semibold tracking-widest z-50 uppercase border-b border-pink-dark/10">
+  <div class="bg-charcoal text-white py-2 text-center text-[13px] font-medium tracking-widest z-50 uppercase border-b border-charcoal/10">
     <p>Welcome to Kesariya Saree Showroom &bull; Open from 10:00 AM &bull; Rating 5.0/5</p>
   </div>
 
   <!-- 2. MAIN HEADER -->
-  <header id="main-header" class="sticky top-0 bg-white py-4 md:py-6 border-b border-gray transition-all duration-300 z-40">
+  <header id="main-header" class="sticky top-0 bg-white py-3 border-b border-gray transition-all duration-300 z-40">
     <div class="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
       
-      <!-- Brand Logo / Wordmark (Clean & Modern, styled like Girls Glitters) -->
+      <!-- Wordmark Logo/Branding (Dawn Theme Style) -->
       <a href="#home" class="flex flex-col select-none group">
         <span class="font-extrabold text-lg md:text-xl lg:text-2xl tracking-[0.2em] text-charcoal uppercase leading-none">KESARIYA</span>
         <span class="text-[9px] tracking-[0.3em] text-pink font-semibold leading-normal mt-1">SAREE SHOWROOM</span>
       </a>
 
-      <!-- Navigation/Menu (Centered) -->
-      <nav class="hidden lg:flex space-x-8 items-center">
-        <a href="#home" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">HOME</a>
-        <a href="#sarees" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">SAREES</a>
-        <a href="#suits" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">SUITS</a>
-        <a href="#fabrics" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">FABRICS</a>
-        <a href="#wholesale" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">WHOLESALE</a>
-        <a href="#about" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">ABOUT</a>
-        <a href="#contact" class="nav-link text-xs font-semibold tracking-widest text-charcoal hover:text-pink transition">CONTACT</a>
+      <!-- Navigation Links (Dawn Inline Menu Style) -->
+      <nav class="hidden lg:flex space-x-6 items-center">
+        <a href="#home" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">HOME</a>
+        <a href="#latest" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">LATEST</a>
+        <a href="#sarees" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">SAREES</a>
+        <a href="#suits" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">SUITS</a>
+        <a href="#fabrics" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">FABRICS</a>
+        <a href="#wholesale" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">WHOLESALE</a>
+        <a href="#about" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">ABOUT</a>
+        <a href="#contact" class="nav-link py-3 text-sm font-normal tracking-widest text-charcoal hover:text-pink transition">CONTACT</a>
       </nav>
 
-      <!-- Action Utility Icons (Right) -->
-      <div class="flex items-center space-x-4 md:space-x-6">
+      <!-- Utility Icons (Right) -->
+      <div class="flex items-center space-x-4 md:space-x-5">
         
         <!-- Search Trigger -->
         <button id="search-btn" class="text-charcoal hover:text-pink text-base md:text-lg transition" aria-label="Search">
@@ -137,6 +138,11 @@
         <a href="#location" class="text-charcoal hover:text-pink text-base md:text-lg transition" aria-label="Showroom Location">
           <i class="fa-solid fa-location-dot"></i>
         </a>
+
+        <!-- Profile/Account Trigger Button -->
+        <button id="profile-btn" class="text-charcoal hover:text-pink text-base md:text-lg transition" aria-label="Profile Account">
+          <i id="profile-icon" class="fa-regular fa-user"></i>
+        </button>
         
         <!-- Mobile Menu Toggle Button -->
         <button id="menu-btn" class="lg:hidden relative w-5 h-4 hamburger-btn focus:outline-none" aria-label="Toggle Menu">
@@ -151,7 +157,7 @@
   </header>
 
   <!-- MOBILE MENU DRAWER -->
-  <div id="mobile-menu" class="fixed top-[88px] right-0 bottom-0 w-80 bg-white border-l border-gray shadow-xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between py-6 px-6 lg:hidden">
+  <div id="mobile-menu" class="fixed top-[69px] right-0 bottom-0 w-80 bg-white border-l border-gray shadow-xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col justify-between py-6 px-6 lg:hidden">
     <div class="flex flex-col space-y-6">
       <div class="border-b border-gray pb-4">
         <span class="font-extrabold text-lg tracking-[0.2em] text-charcoal uppercase">KESARIYA</span>
@@ -159,10 +165,11 @@
       </div>
       <nav class="flex flex-col space-y-4">
         <a href="#home" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Home</a>
+        <a href="#latest" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Latest</a>
         <a href="#sarees" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Sarees</a>
         <a href="#suits" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Suits</a>
         <a href="#fabrics" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Fabrics</a>
-        <a href="#wholesale" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Wholesale & Retail</a>
+        <a href="#wholesale" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">Wholesale</a>
         <a href="#about" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink border-b border-gray pb-2">About Us</a>
         <a href="#contact" class="text-sm font-semibold tracking-widest text-charcoal hover:text-pink pb-2">Contact</a>
       </nav>
@@ -186,27 +193,27 @@
 
   <main class="flex-grow">
     
-    <!-- 3. CATALOG CATEGORY BUBBLES / NAVIGATION -->
+    <!-- 3. CATALOG CATEGORIES NAVIGATION BUBBLES -->
     <section class="py-6 border-b border-gray bg-white overflow-x-auto">
       <div class="max-w-7xl mx-auto px-4 md:px-8 flex justify-start md:justify-center items-center space-x-6 md:space-x-12 min-w-max">
         
         <a href="#sarees" class="flex flex-col items-center group space-y-2">
           <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-gray group-hover:border-pink transition duration-200">
-            <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=150&q=80" alt="Sarees Category Banner" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=150&q=80" alt="Sarees" class="w-full h-full object-cover">
           </div>
           <span class="text-[10px] md:text-xs font-bold tracking-widest text-charcoal group-hover:text-pink transition">SAREES</span>
         </a>
 
         <a href="#suits" class="flex flex-col items-center group space-y-2">
           <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-gray group-hover:border-pink transition duration-200">
-            <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=150&q=80" alt="Suits Category Banner" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=150&q=80" alt="Suits" class="w-full h-full object-cover">
           </div>
           <span class="text-[10px] md:text-xs font-bold tracking-widest text-charcoal group-hover:text-pink transition">SUITS</span>
         </a>
 
         <a href="#fabrics" class="flex flex-col items-center group space-y-2">
           <div class="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border border-gray group-hover:border-pink transition duration-200">
-            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=150&q=80" alt="Fabrics Category Banner" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=150&q=80" alt="Fabrics" class="w-full h-full object-cover">
           </div>
           <span class="text-[10px] md:text-xs font-bold tracking-widest text-charcoal group-hover:text-pink transition">FABRICS</span>
         </a>
@@ -242,7 +249,7 @@
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold tracking-normal text-charcoal leading-tight uppercase">
             Elegance Woven<br>for Every Occasion
           </h1>
-          <p class="text-charcoal-light text-sm md:text-base leading-relaxed max-w-lg mx-auto lg:mx-0">
+          <p class="text-charcoal-light text-sm leading-relaxed max-w-lg mx-auto lg:mx-0">
             Discover a curated collection of fine sarees, bespoke suits, and high-quality fabrics. Dedicated to providing retail shoppers and wholesale clients with superior Indian apparel in Rewari.
           </p>
           <div class="text-xs uppercase tracking-widest font-bold text-charcoal border-y border-gray py-3 max-w-md mx-auto lg:mx-0">
@@ -260,9 +267,9 @@
 
         <!-- Banner Image Side -->
         <div class="lg:col-span-7 reveal-element reveal-delay-2">
-          <div class="relative w-full aspect-[16/9] bg-gray overflow-hidden border border-gray shadow-sm">
+          <div class="relative w-full aspect-[16/9] bg-gray overflow-hidden border border-gray">
             <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&h=675&q=80" 
-                 alt="Premium Traditional Saree Showcase Banner" 
+                 alt="Premium Traditional Saree Showcase" 
                  class="w-full h-full object-cover object-center hero-image-animate"
                  loading="eager">
           </div>
@@ -271,7 +278,7 @@
       </div>
     </section>
 
-    <!-- 5. LATEST COLLECTION (HIGH-DENSITY GRID) -->
+    <!-- 5. LATEST COLLECTION (4 COLUMNS DESKTOP, 2 COLUMNS MOBILE) -->
     <section id="latest" class="py-16 bg-white border-b border-gray scroll-mt-20">
       <div class="max-w-7xl mx-auto px-4 md:px-8">
         
@@ -280,19 +287,19 @@
           <div class="w-16 h-0.5 bg-pink mx-auto mt-3"></div>
         </div>
 
-        <!-- 4-Column Desktop, 2-Column Mobile Grid -->
+        <!-- Grid using exact card layout specs -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10">
           
-          <!-- Card 1 (Banarasi Saree) -->
+          <!-- Card 1 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
+              <div class="product-card-img-wrapper aspect-[9/16]">
                 <span class="product-card-badge">New</span>
-                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&h=667&q=80" 
+                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&h=888&q=80" 
                      alt="Banarasi Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Banarasi Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Banarasi Saree</a>
               <p class="text-xs text-charcoal-light mt-1">Rich woven silk with gold zari border.</p>
             </div>
             <div class="mt-3">
@@ -302,15 +309,15 @@
             </div>
           </div>
 
-          <!-- Card 2 (Designer Suit) -->
+          <!-- Card 2 -->
           <div class="product-card reveal-element reveal-delay-2 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=500&h=667&q=80" 
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=500&h=888&q=80" 
                      alt="Designer Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Designer Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Designer Suit</a>
               <p class="text-xs text-charcoal-light mt-1">Stunning ethnic suit set with premium print detail.</p>
             </div>
             <div class="mt-3">
@@ -320,15 +327,15 @@
             </div>
           </div>
 
-          <!-- Card 3 (Premium Suit Fabric) -->
+          <!-- Card 3 -->
           <div class="product-card reveal-element reveal-delay-3 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=667&q=80" 
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=888&q=80" 
                      alt="Premium Suit Fabric" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Fabrics</div>
-              <a href="#contact" class="product-card-title block">Premium Suit Fabric</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Premium Suit Fabric</a>
               <p class="text-xs text-charcoal-light mt-1">High-thread count textile material by the meter.</p>
             </div>
             <div class="mt-3">
@@ -338,15 +345,15 @@
             </div>
           </div>
 
-          <!-- Card 4 (Silk Saree) -->
+          <!-- Card 4 -->
           <div class="product-card reveal-element reveal-delay-4 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=500&h=667&q=80" 
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=500&h=888&q=80" 
                      alt="Silk Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Silk Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Silk Saree</a>
               <p class="text-xs text-charcoal-light mt-1">Classic traditional pure handloom silk saree drape.</p>
             </div>
             <div class="mt-3">
@@ -367,63 +374,63 @@
         <div class="flex justify-between items-center mb-10 reveal-element">
           <div>
             <h2 class="text-2xl font-bold tracking-wider text-charcoal uppercase">Sarees</h2>
-            <p class="text-xs text-charcoal-light mt-1">Banarasi, Silk, Designer, Party Wear, Festive, Cotton, Georgette, Printed</p>
+            <p class="text-xs text-charcoal-light mt-1">Banarasi, Silk, Designer, Party Wear, Festive, Printed, Georgette, Cotton</p>
           </div>
           <a href="#contact" class="text-xs font-bold tracking-widest text-pink hover:underline uppercase">View All</a>
         </div>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10">
           
-          <!-- Saree 1 (Banarasi Saree) -->
+          <!-- Saree 1 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&h=667&q=80" alt="Banarasi Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&h=888&q=80" alt="Banarasi Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Banarasi Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Banarasi Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Banarasi Saree" data-category="Sarees">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Saree 2 (Silk Saree) -->
+          <!-- Saree 2 -->
           <div class="product-card reveal-element reveal-delay-2 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=500&h=667&q=80" alt="Silk Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=500&h=888&q=80" alt="Silk Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Silk Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Silk Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Silk Saree" data-category="Sarees">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Saree 3 (Designer Saree) -->
+          <!-- Saree 3 -->
           <div class="product-card reveal-element reveal-delay-3 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&h=667&q=80" alt="Designer Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&h=888&q=80" alt="Designer Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Designer Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Designer Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Designer Saree" data-category="Sarees">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Saree 4 (Party Wear Saree) -->
+          <!-- Saree 4 -->
           <div class="product-card reveal-element reveal-delay-4 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?auto=format&fit=crop&w=500&h=667&q=80" alt="Party Wear Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?auto=format&fit=crop&w=500&h=888&q=80" alt="Party Wear Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Party Wear Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Party Wear Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Party Wear Saree" data-category="Sarees">ENQUIRE NOW</button>
@@ -434,56 +441,56 @@
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-10 mt-8">
           
-          <!-- Saree 5 (Festive Saree) -->
+          <!-- Saree 5 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=667&q=80" alt="Festive Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=888&q=80" alt="Festive Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Festive Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Festive Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Festive Saree" data-category="Sarees">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Saree 6 (Printed Saree) -->
+          <!-- Saree 6 -->
           <div class="product-card reveal-element reveal-delay-2 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=500&h=667&q=80" alt="Printed Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=500&h=888&q=80" alt="Printed Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Printed Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Printed Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Printed Saree" data-category="Sarees">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Saree 7 (Georgette Saree) -->
+          <!-- Saree 7 -->
           <div class="product-card reveal-element reveal-delay-3 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=500&h=667&q=80" alt="Georgette Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=500&h=888&q=80" alt="Georgette Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Georgette Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Georgette Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Georgette Saree" data-category="Sarees">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Saree 8 (Cotton Saree) -->
+          <!-- Saree 8 -->
           <div class="product-card reveal-element reveal-delay-4 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&h=667&q=80" alt="Cotton Saree" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&h=888&q=80" alt="Cotton Saree" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Sarees</div>
-              <a href="#contact" class="product-card-title block">Cotton Saree</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Cotton Saree</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Cotton Saree" data-category="Sarees">ENQUIRE NOW</button>
@@ -509,42 +516,42 @@
 
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
           
-          <!-- Suit 1 (Designer Suit) -->
+          <!-- Suit 1 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=500&h=667&q=80" alt="Designer Suit" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=500&h=888&q=80" alt="Designer Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Designer Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Designer Suit</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Designer Suit" data-category="Suits">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Suit 2 (Party Wear Suit) -->
+          <!-- Suit 2 -->
           <div class="product-card reveal-element reveal-delay-2 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&h=667&q=80" alt="Party Wear Suit" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=500&h=888&q=80" alt="Party Wear Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Party Wear Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Party Wear Suit</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Party Wear Suit" data-category="Suits">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Suit 3 (Anarkali Suit) -->
+          <!-- Suit 3 -->
           <div class="product-card reveal-element reveal-delay-3 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?auto=format&fit=crop&w=500&h=667&q=80" alt="Anarkali Suit" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?auto=format&fit=crop&w=500&h=888&q=80" alt="Anarkali Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Anarkali Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Anarkali Suit</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Anarkali Suit" data-category="Suits">ENQUIRE NOW</button>
@@ -555,42 +562,42 @@
 
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
 
-          <!-- Suit 4 (Salwar Suit) -->
+          <!-- Suit 4 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=667&q=80" alt="Salwar Suit" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=888&q=80" alt="Salwar Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Salwar Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Salwar Suit</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Salwar Suit" data-category="Suits">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Suit 5 (Festive Suit) -->
+          <!-- Suit 5 -->
           <div class="product-card reveal-element reveal-delay-2 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=500&h=667&q=80" alt="Festive Suit" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=500&h=888&q=80" alt="Festive Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Festive Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Festive Suit</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Festive Suit" data-category="Suits">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Suit 6 (Punjabi Suit) -->
+          <!-- Suit 6 -->
           <div class="product-card reveal-element reveal-delay-3 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=500&h=667&q=80" alt="Punjabi Suit" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=500&h=888&q=80" alt="Punjabi Suit" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Suits</div>
-              <a href="#contact" class="product-card-title block">Punjabi Suit</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Punjabi Suit</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-2 text-xs" data-product="Punjabi Suit" data-category="Suits">ENQUIRE NOW</button>
@@ -616,70 +623,70 @@
 
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
           
-          <!-- Fabric 1 (Premium Suit Fabric) -->
+          <!-- Fabric 1 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=667&q=80" alt="Premium Suit Fabric" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=500&h=888&q=80" alt="Premium Suit Fabric" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Fabrics</div>
-              <a href="#contact" class="product-card-title block">Premium Suit Fabric</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Premium Suit Fabric</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-1 text-xs" data-product="Premium Suit Fabric" data-category="Fabrics">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Fabric 2 (Dress Material) -->
+          <!-- Fabric 2 -->
           <div class="product-card reveal-element reveal-delay-2 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=500&h=667&q=80" alt="Dress Material" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1606744824163-985d376605aa?auto=format&fit=crop&w=500&h=888&q=80" alt="Dress Material" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Fabrics</div>
-              <a href="#contact" class="product-card-title block">Dress Material</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Dress Material</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-1 text-xs" data-product="Dress Material" data-category="Fabrics">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Fabric 3 (Cotton Fabric) -->
+          <!-- Fabric 3 -->
           <div class="product-card reveal-element reveal-delay-3 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=500&h=667&q=80" alt="Cotton Fabric" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=500&h=888&q=80" alt="Cotton Fabric" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Fabrics</div>
-              <a href="#contact" class="product-card-title block">Cotton Fabric</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Cotton Fabric</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-1 text-xs" data-product="Cotton Fabric" data-category="Fabrics">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Fabric 4 (Designer Fabric) -->
+          <!-- Fabric 4 -->
           <div class="product-card reveal-element reveal-delay-4 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&h=667&q=80" alt="Designer Fabric" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&h=888&q=80" alt="Designer Fabric" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Fabrics</div>
-              <a href="#contact" class="product-card-title block">Designer Fabric</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Designer Fabric</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-1 text-xs" data-product="Designer Fabric" data-category="Fabrics">ENQUIRE NOW</button>
             </div>
           </div>
 
-          <!-- Fabric 5 (Printed Fabric) -->
+          <!-- Fabric 5 -->
           <div class="product-card reveal-element reveal-delay-1 flex flex-col justify-between">
             <div class="group">
-              <div class="product-card-img-wrapper aspect-[3/4]">
-                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&h=667&q=80" alt="Printed Fabric" class="product-card-img" loading="lazy">
+              <div class="product-card-img-wrapper aspect-[9/16]">
+                <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&h=888&q=80" alt="Printed Fabric" class="product-card-img" loading="lazy">
               </div>
               <div class="product-card-cat">Fabrics</div>
-              <a href="#contact" class="product-card-title block">Printed Fabric</a>
+              <a href="#contact" class="product-card-title block text-[17px] font-normal text-charcoal">Printed Fabric</a>
             </div>
             <div class="mt-3">
               <button class="enquire-btn w-full btn-pill btn-pill-secondary py-1 text-xs" data-product="Printed Fabric" data-category="Fabrics">ENQUIRE NOW</button>
@@ -751,19 +758,19 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 reveal-element">
           
           <div class="relative aspect-square bg-gray overflow-hidden border border-gray">
-            <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&h=400&q=80" alt="Customer Wearing Kesariya Saree" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=400&h=400&q=80" alt="Customer styling" class="w-full h-full object-cover">
           </div>
 
           <div class="relative aspect-square bg-gray overflow-hidden border border-gray">
-            <img src="https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?auto=format&fit=crop&w=400&h=400&q=80" alt="Customer Styling Kesariya Salwar" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?auto=format&fit=crop&w=400&h=400&q=80" alt="Client wedding style" class="w-full h-full object-cover">
           </div>
 
           <div class="relative aspect-square bg-gray overflow-hidden border border-gray">
-            <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&h=400&q=80" alt="Client Event Drape" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=400&h=400&q=80" alt="Ethnic wear client photo" class="w-full h-full object-cover">
           </div>
 
           <div class="relative aspect-square bg-gray overflow-hidden border border-gray">
-            <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&h=400&q=80" alt="Showroom textile preview client photo" class="w-full h-full object-cover">
+            <img src="https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=400&h=400&q=80" alt="Saree client detail review" class="w-full h-full object-cover">
           </div>
 
         </div>
@@ -840,7 +847,7 @@
         <div class="reveal-element">
           <div class="relative aspect-video bg-gray overflow-hidden border border-gray">
             <img src="https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=800&q=80" 
-                 alt="Fine Traditional Fabrics Showroom Interior Detail" class="w-full h-full object-cover">
+                 alt="Traditional apparel display" class="w-full h-full object-cover">
           </div>
         </div>
 
@@ -907,7 +914,7 @@
               allowfullscreen="" 
               loading="lazy" 
               referrerpolicy="no-referrer-when-downgrade"
-              title="Map location of Kesariya Saree Showroom in Rewari">
+              title="Kesariya Saree Showroom local map location">
             </iframe>
           </div>
         </div>
@@ -939,19 +946,19 @@
             
             <div class="flex flex-col">
               <label for="form-name" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Name <span class="text-pink">*</span></label>
-              <input type="text" id="form-name" required placeholder="Enter name" class="flat-input">
+              <input type="text" id="form-name" required placeholder="Enter name" class="flat-input text-charcoal">
             </div>
 
             <div class="flex flex-col">
               <label for="form-phone" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Phone <span class="text-pink">*</span></label>
-              <input type="tel" id="form-phone" required placeholder="Enter phone" class="flat-input">
+              <input type="tel" id="form-phone" required placeholder="Enter phone" class="flat-input text-charcoal">
             </div>
 
           </div>
 
           <div class="flex flex-col">
             <label for="form-category" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Category</label>
-            <select id="form-category" class="flat-input">
+            <select id="form-category" class="flat-input text-charcoal bg-white">
               <option value="Sarees">Sarees</option>
               <option value="Suits">Suits</option>
               <option value="Fabrics">Fabrics</option>
@@ -962,7 +969,7 @@
 
           <div class="flex flex-col">
             <label for="form-message" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Message <span class="text-pink">*</span></label>
-            <textarea id="form-message" rows="4" required placeholder="Type product details, quantity, or specific questions..." class="flat-input resize-none"></textarea>
+            <textarea id="form-message" rows="4" required placeholder="Type product details, quantity, or specific questions..." class="flat-input text-charcoal resize-none"></textarea>
           </div>
 
           <button type="submit" class="w-full btn-pill btn-pill-primary py-3 flex items-center justify-center space-x-2 text-xs">
@@ -976,17 +983,17 @@
 
   </main>
 
-  <!-- 15. FOOTER (Represents structural elements of girlsglitters.com footer) -->
-  <footer class="bg-gray border-t border-gray-dark/30 pt-16 pb-8">
+  <!-- 15. FOOTER (Black background, white text matching computed styles specifications) -->
+  <footer class="bg-black text-white border-t border-charcoal/30 pt-16 pb-8">
     <div class="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
       
-      <!-- Showroom info -->
+      <!-- Column 1 -->
       <div class="space-y-4">
         <a href="#home" class="flex flex-col select-none">
-          <span class="font-extrabold text-xl tracking-[0.2em] text-charcoal uppercase leading-none">KESARIYA</span>
+          <span class="font-extrabold text-xl tracking-[0.2em] text-white uppercase leading-none">KESARIYA</span>
           <span class="text-[9px] tracking-[0.3em] text-pink font-semibold leading-normal mt-1">SAREE SHOWROOM</span>
         </a>
-        <p class="text-xs text-charcoal-light leading-relaxed">
+        <p class="text-xs text-white/70 leading-relaxed">
           Sarees &bull; Suits &bull; Fabrics &bull; Wholesale &bull; Retail. Bringing the latest traditional patterns and high-quality Indian drapes to Rewari.
         </p>
         <div class="flex items-center space-x-2 pt-1">
@@ -997,27 +1004,27 @@
             <i class="fa-solid fa-star"></i>
             <i class="fa-solid fa-star"></i>
           </div>
-          <span class="text-xs text-charcoal-light font-bold">5.0/5 &bull; 23 Reviews</span>
+          <span class="text-xs text-white/70 font-bold">5.0/5 &bull; 23 Reviews</span>
         </div>
       </div>
 
-      <!-- Quick Links -->
+      <!-- Column 2 -->
       <div class="space-y-4">
-        <h4 class="text-xs font-bold text-charcoal uppercase tracking-widest">Important Links</h4>
+        <h4 class="text-xs font-bold text-white uppercase tracking-widest">Important Links</h4>
         <ul class="space-y-2 text-xs">
-          <li><a href="#home" class="text-charcoal-light hover:text-pink transition">Home</a></li>
-          <li><a href="#sarees" class="text-charcoal-light hover:text-pink transition">Sarees</a></li>
-          <li><a href="#suits" class="text-charcoal-light hover:text-pink transition">Suits</a></li>
-          <li><a href="#fabrics" class="text-charcoal-light hover:text-pink transition">Fabrics</a></li>
-          <li><a href="#wholesale" class="text-charcoal-light hover:text-pink transition">Wholesale</a></li>
-          <li><a href="#about" class="text-charcoal-light hover:text-pink transition">About Us</a></li>
+          <li><a href="#home" class="text-white/70 hover:text-pink transition">Home</a></li>
+          <li><a href="#sarees" class="text-white/70 hover:text-pink transition">Sarees</a></li>
+          <li><a href="#suits" class="text-white/70 hover:text-pink transition">Suits</a></li>
+          <li><a href="#fabrics" class="text-white/70 hover:text-pink transition">Fabrics</a></li>
+          <li><a href="#wholesale" class="text-white/70 hover:text-pink transition">Wholesale</a></li>
+          <li><a href="#about" class="text-white/70 hover:text-pink transition">About Us</a></li>
         </ul>
       </div>
 
-      <!-- Categories -->
+      <!-- Column 3 -->
       <div class="space-y-4">
-        <h4 class="text-xs font-bold text-charcoal uppercase tracking-widest">Our Catalog</h4>
-        <ul class="space-y-2 text-xs text-charcoal-light">
+        <h4 class="text-xs font-bold text-white uppercase tracking-widest">Our Catalog</h4>
+        <ul class="space-y-2 text-xs text-white/70">
           <li>Sarees (Silk, Banarasi, Designer)</li>
           <li>Suits (Anarkali, Salwar, Palazzo)</li>
           <li>Fabrics & Unstitched Wear</li>
@@ -1026,10 +1033,10 @@
         </ul>
       </div>
 
-      <!-- Contacts -->
+      <!-- Column 4 -->
       <div class="space-y-4">
-        <h4 class="text-xs font-bold text-charcoal uppercase tracking-widest">Contact Information</h4>
-        <div class="space-y-2.5 text-xs text-charcoal-light leading-relaxed">
+        <h4 class="text-xs font-bold text-white uppercase tracking-widest">Contact Information</h4>
+        <div class="space-y-2.5 text-xs text-white/70 leading-relaxed">
           <div class="flex items-start space-x-2">
             <i class="fa-solid fa-location-dot text-pink text-sm mt-0.5 w-4"></i>
             <span>
@@ -1040,11 +1047,11 @@
           </div>
           <div class="flex items-center space-x-2">
             <i class="fa-solid fa-phone text-pink text-sm w-4"></i>
-            <a href="tel:09350371098" class="hover:text-pink hover:underline font-semibold">093503 71098</a>
+            <a href="tel:09350371098" class="hover:text-pink hover:underline font-semibold text-white">093503 71098</a>
           </div>
           <div class="flex items-center space-x-2">
             <i class="fa-solid fa-clock text-pink text-sm w-4"></i>
-            <span class="text-green-700 font-bold">Open from 10:00 AM</span>
+            <span class="text-green-400 font-bold">Open from 10:00 AM</span>
           </div>
         </div>
       </div>
@@ -1052,14 +1059,14 @@
     </div>
 
     <!-- Bottom Copyright -->
-    <div class="max-w-7xl mx-auto px-4 md:px-8 pt-8 border-t border-gray-dark/30 flex flex-col sm:flex-row justify-between items-center text-[10px] text-charcoal-light tracking-wider gap-4">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 pt-8 border-t border-charcoal/20 flex flex-col sm:flex-row justify-between items-center text-[10px] text-white/50 tracking-wider gap-4">
       <p>&copy; 2026 Kesariya Saree Showroom. All Rights Reserved.</p>
       <span>Bespoke Indian Fashion Showroom</span>
     </div>
   </footer>
 
   <!-- Search Panel Overlay Drawer -->
-  <div id="search-overlay" class="fixed inset-0 bg-white/95 z-50 search-overlay flex flex-col items-center justify-start pt-24 px-4">
+  <div id="search-overlay" class="fixed inset-0 bg-white/98 z-50 search-overlay flex flex-col items-center justify-start pt-24 px-4">
     <!-- Close Button -->
     <button id="close-search" class="absolute top-8 right-8 text-charcoal hover:text-pink text-3xl focus:outline-none" aria-label="Close Search">
       <i class="fa-solid fa-xmark"></i>
@@ -1085,7 +1092,128 @@
     </div>
   </div>
 
+  <!-- Firebase Authentication Modal Overlay -->
+  <div id="auth-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition duration-300">
+    <!-- Modal Card (Dawn Design System: crisp white background, thin gray borders, black text) -->
+    <div class="relative bg-white border border-gray w-full max-w-md p-6 md:p-8 shadow-2xl flex flex-col space-y-6">
+      
+      <!-- Close button -->
+      <button id="close-auth" class="absolute top-4 right-4 text-charcoal hover:text-pink text-xl focus:outline-none" aria-label="Close Accounts">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- VIEW 1: SIGN IN -->
+      <div id="auth-login-view" class="space-y-4">
+        <div class="text-center">
+          <h3 class="text-xl font-bold uppercase tracking-widest text-charcoal">Sign In</h3>
+          <p class="text-xs text-charcoal-light mt-1">Enter your details to access your profile</p>
+        </div>
+
+        <div id="login-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-2.5 rounded text-center"></div>
+
+        <form id="login-form" class="space-y-4">
+          <div class="flex flex-col">
+            <label for="login-email" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Email Address</label>
+            <input type="email" id="login-email" required placeholder="name@example.com" class="flat-input text-charcoal">
+          </div>
+          <div class="flex flex-col">
+            <label for="login-password" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Password</label>
+            <input type="password" id="login-password" required placeholder="Enter password" class="flat-input text-charcoal">
+          </div>
+          <button type="submit" class="w-full btn-pill btn-pill-primary py-3 text-xs">
+            SIGN IN
+          </button>
+        </form>
+
+        <div class="flex items-center my-4">
+          <div class="flex-grow border-t border-gray"></div>
+          <span class="mx-3 text-[10px] uppercase font-bold text-charcoal-light/50 tracking-wider">or</span>
+          <div class="flex-grow border-t border-gray"></div>
+        </div>
+
+        <button id="google-login-btn" class="w-full btn-pill btn-pill-outline py-3 flex items-center justify-center space-x-2 text-xs bg-white">
+          <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/google.svg" alt="Google Logo" class="w-4 h-4 filter grayscale contrast-200">
+          <span>SIGN IN WITH GOOGLE</span>
+        </button>
+
+        <p class="text-xs text-center text-charcoal-light mt-4">
+          Don't have an account? 
+          <button id="go-to-signup" class="text-pink hover:underline font-bold focus:outline-none">Create account</button>
+        </p>
+      </div>
+
+      <!-- VIEW 2: SIGN UP -->
+      <div id="auth-signup-view" class="space-y-4 hidden">
+        <div class="text-center">
+          <h3 class="text-xl font-bold uppercase tracking-widest text-charcoal">Create Account</h3>
+          <p class="text-xs text-charcoal-light mt-1">Register for an account with Kesariya</p>
+        </div>
+
+        <div id="signup-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-2.5 rounded text-center"></div>
+
+        <form id="signup-form" class="space-y-4">
+          <div class="flex flex-col">
+            <label for="signup-email" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Email Address <span class="text-pink">*</span></label>
+            <input type="email" id="signup-email" required placeholder="name@example.com" class="flat-input text-charcoal">
+          </div>
+          <div class="flex flex-col">
+            <label for="signup-password" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Password <span class="text-pink">*</span></label>
+            <input type="password" id="signup-password" required placeholder="Enter password (min 6 chars)" class="flat-input text-charcoal">
+          </div>
+          <div class="flex flex-col">
+            <label for="signup-confirm-password" class="text-xs uppercase tracking-wider font-semibold text-charcoal mb-2">Confirm Password <span class="text-pink">*</span></label>
+            <input type="password" id="signup-confirm-password" required placeholder="Re-enter password" class="flat-input text-charcoal">
+          </div>
+          <button type="submit" class="w-full btn-pill btn-pill-primary py-3 text-xs">
+            CREATE ACCOUNT
+          </button>
+        </form>
+
+        <div class="flex items-center my-4">
+          <div class="flex-grow border-t border-gray"></div>
+          <span class="mx-3 text-[10px] uppercase font-bold text-charcoal-light/50 tracking-wider">or</span>
+          <div class="flex-grow border-t border-gray"></div>
+        </div>
+
+        <button id="google-signup-btn" class="w-full btn-pill btn-pill-outline py-3 flex items-center justify-center space-x-2 text-xs bg-white">
+          <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/google.svg" alt="Google Logo" class="w-4 h-4 filter grayscale contrast-200">
+          <span>SIGN UP WITH GOOGLE</span>
+        </button>
+
+        <p class="text-xs text-center text-charcoal-light mt-4">
+          Already have an account? 
+          <button id="go-to-login" class="text-pink hover:underline font-bold focus:outline-none">Sign in</button>
+        </p>
+      </div>
+
+      <!-- VIEW 3: PROFILE (LOGGED IN PANEL) -->
+      <div id="auth-profile-view" class="space-y-6 hidden text-center">
+        <div>
+          <i class="fa-solid fa-circle-user text-pink text-5xl"></i>
+          <h3 class="text-lg font-bold uppercase tracking-wider text-charcoal mt-3">Your Account</h3>
+          <p id="profile-email-display" class="text-sm font-semibold text-charcoal-light mt-1.5"></p>
+        </div>
+
+        <div class="border-t border-b border-gray py-4 space-y-2 text-left text-xs">
+          <p class="text-charcoal-light">Logged in successfully via Firebase Auth.</p>
+          <p class="text-charcoal-light">You can now submit enquiries with your account pre-filled.</p>
+        </div>
+
+        <div class="space-y-3">
+          <button id="auth-logout-btn" class="w-full btn-pill btn-pill-outline py-3 text-xs uppercase">
+            LOG OUT
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Firebase Compat App & Auth SDK Libraries -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
   <!-- App Custom Logic JS -->
-  <script src="app.js"></script>
+  <script src="app.js?v=1.2"></script>
 </body>
 </html>

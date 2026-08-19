@@ -192,6 +192,7 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   position: relative;
   width: 100%;
+  aspect-ratio: 9 / 16;
   background-color: var(--color-secondary-bg);
   border: 1px solid var(--color-border);
 }
@@ -312,3 +313,22 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
   pointer-events: auto;
 }
+
+/* Authentication Overlay Styles */
+#auth-overlay {
+  transition: opacity 0.25s ease-in-out;
+}
+#auth-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+#auth-overlay .modal-content {
+  transform: translateY(15px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#auth-overlay.open .modal-content {
+  transform: translateY(0);
+}
+
