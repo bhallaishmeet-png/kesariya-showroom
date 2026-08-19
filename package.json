@@ -1,0 +1,23 @@
+{
+  "name": "kesariya-saree",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhallaishmeet-png/kesariya-showroom.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/bhallaishmeet-png/kesariya-showroom/issues"
+  },
+  "homepage": "https://github.com/bhallaishmeet-png/kesariya-showroom#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.2.0"
+  }
+}
