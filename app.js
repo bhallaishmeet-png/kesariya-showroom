@@ -92,6 +92,88 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Close nav details on dropdown link clicks (for mobile/details layout)
+  const dropdownDetails = document.querySelectorAll('nav details');
+  dropdownDetails.forEach(details => {
+    const links = details.querySelectorAll('a');
+    links.forEach(l => {
+      l.addEventListener('click', () => {
+        details.removeAttribute('open');
+      });
+    });
+  });
+
+  // --- Hero Slideshow Carousel ---
+  const slidesWrapper = document.querySelector('.slides-wrapper');
+  const slides = document.querySelectorAll('.slide-item');
+  const prevBtn = document.getElementById('prev-slide');
+  const nextBtn = document.getElementById('next-slide');
+  const dots = document.querySelectorAll('.slide-dot');
+  
+  let currentSlide = 0;
+  const slideCount = slides.length;
+  let slideTimer = null;
+
+  const showSlide = (index) => {
+    if (index < 0) {
+      currentSlide = slideCount - 1;
+    } else if (index >= slideCount) {
+      currentSlide = 0;
+    } else {
+      currentSlide = index;
+    }
+    
+    // Translate slides
+    slidesWrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+    
+    // Update dots
+    dots.forEach((dot, idx) => {
+      if (idx === currentSlide) {
+        dot.classList.add('active-dot');
+        dot.classList.remove('bg-white/50');
+        dot.classList.add('bg-white');
+      } else {
+        dot.classList.remove('active-dot');
+        dot.classList.add('bg-white/50');
+        dot.classList.remove('bg-white');
+      }
+    });
+  };
+
+  const startSlideShow = () => {
+    stopSlideShow();
+    slideTimer = setInterval(() => {
+      showSlide(currentSlide + 1);
+    }, 5000);
+  };
+
+  const stopSlideShow = () => {
+    if (slideTimer) clearInterval(slideTimer);
+  };
+
+  if (prevBtn && nextBtn && slidesWrapper) {
+    prevBtn.addEventListener('click', () => {
+      showSlide(currentSlide - 1);
+      startSlideShow(); // restart timer
+    });
+
+    nextBtn.addEventListener('click', () => {
+      showSlide(currentSlide + 1);
+      startSlideShow();
+    });
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const target = parseInt(e.currentTarget.getAttribute('data-slide'));
+        showSlide(target);
+        startSlideShow();
+      });
+    });
+
+    // Start auto slide
+    startSlideShow();
+  }
+
   // --- Firebase Authentication Modal Logic ---
   const profileBtn = document.getElementById('profile-btn');
   const profileIcon = document.getElementById('profile-icon');
@@ -306,14 +388,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Exact catalog list matching index.html items
   const showroomCatalog = [
     // SAREES
-    { name: 'Banarasi Saree', category: 'Sarees', desc: 'Rich woven silk with traditional gold zari border detailing.', link: '#sarees' },
-    { name: 'Silk Saree', category: 'Sarees', desc: 'Classic traditional pure handloom silk saree drape.', link: '#sarees' },
-    { name: 'Designer Saree', category: 'Sarees', desc: 'Bespoke modern saree featuring delicate styling accents.', link: '#sarees' },
-    { name: 'Party Wear Saree', category: 'Sarees', desc: 'Fluid and glamorous saree designed for social gatherings.', link: '#sarees' },
-    { name: 'Festive Saree', category: 'Sarees', desc: 'Traditional weave highlighting ceremonial colors.', link: '#sarees' },
-    { name: 'Printed Saree', category: 'Sarees', desc: 'Lightweight contemporary printed floral pattern saree.', link: '#sarees' },
-    { name: 'Georgette Saree', category: 'Sarees', desc: 'Soft and fluid premium georgette saree.', link: '#sarees' },
-    { name: 'Cotton Saree', category: 'Sarees', desc: 'Breathable handloom daily wear cotton saree.', link: '#sarees' },
+    { name: 'Premium Banarasi Saree', category: 'Sarees', desc: 'Rich woven silk with traditional gold zari border detailing.', link: '#latest' },
+    { name: 'Designer Silk Saree', category: 'Sarees', desc: 'Classic traditional pure handloom silk saree drape.', link: '#latest' },
+    { name: 'Festive Saree', category: 'Sarees', desc: 'Traditional weave highlighting ceremonial colors.', link: '#latest' },
+    { name: 'Premium Georgette Saree', category: 'Sarees', desc: 'Soft and fluid premium georgette saree.', link: '#latest' },
+    { name: 'Designer Party Wear Saree', category: 'Sarees', desc: 'Bespoke modern saree featuring delicate styling accents.', link: '#latest' },
+    { name: 'Traditional Silk Saree', category: 'Sarees', desc: 'Fluid and glamorous saree designed for social gatherings.', link: '#latest' },
+    { name: 'Premium Cotton Saree', category: 'Sarees', desc: 'Breathable handloom daily wear cotton saree.', link: '#latest' },
+    { name: 'Bridal Printed Saree', category: 'Sarees', desc: 'Beautiful printed patterns on rich bridal fabric.', link: '#latest' },
     
     // SUITS
     { name: 'Designer Suit', category: 'Suits', desc: 'Grand matching ethnic salwar suit with premium detailing.', link: '#suits' },
@@ -325,10 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // FABRICS
     { name: 'Premium Suit Fabric', category: 'Fabrics', desc: 'Fine thread counts suit material for bespoke styling.', link: '#fabrics' },
-    { name: 'Dress Material', category: 'Fabrics', desc: 'Premium unstitched fabric matching top and bottom patterns.', link: '#fabrics' },
-    { name: 'Cotton Fabric', category: 'Fabrics', desc: 'Soft and high-quality pure cotton by the meter.', link: '#fabrics' },
     { name: 'Designer Fabric', category: 'Fabrics', desc: 'Detailed brocade or sequence fabric for blouses/dresses.', link: '#fabrics' },
-    { name: 'Printed Fabric', category: 'Fabrics', desc: 'Bespoke pattern print fabrics by the meter.', link: '#fabrics' }
+    { name: 'Cotton Fabric', category: 'Fabrics', desc: 'Soft and high-quality pure cotton by the meter.', link: '#fabrics' },
+    { name: 'Printed Fabric', category: 'Fabrics', desc: 'Bespoke pattern print fabrics by the meter.', link: '#fabrics' },
+    { name: 'Dress Material', category: 'Fabrics', desc: 'Premium unstitched fabric matching top and bottom patterns.', link: '#fabrics' }
   ];
 
   // Open search overlay
@@ -478,32 +560,4 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // --- Scroll-Reveal (Intersection Observer) ---
-  const animatedElements = document.querySelectorAll('.reveal-element');
-  
-  if ('IntersectionObserver' in window) {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    animatedElements.forEach(el => {
-      observer.observe(el);
-    });
-  } else {
-    animatedElements.forEach(el => {
-      el.classList.add('active');
-    });
-  }
 });
