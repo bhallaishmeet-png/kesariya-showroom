@@ -437,4 +437,88 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Shopping Cart Drawer Transition Overlay */
+#cart-drawer-overlay {
+  transition: opacity 0.25s ease-in-out;
+}
+#cart-drawer-overlay.open {
+  display: flex;
+  opacity: 1;
+}
+
+#cart-drawer-overlay.open #cart-drawer {
+  transform: translateX(0);
+}
+
+/* Cart Item Cards Layout */
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.cart-item img {
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+.cart-item-info {
+  flex-grow: 1;
+}
+.cart-item-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+  text-transform: uppercase;
+}
+.cart-item-price {
+  font-size: 0.75rem;
+  color: var(--color-foreground-light);
+  margin-top: 0.25rem;
+}
+
+/* Cart Quantity Editor controls */
+.qty-ctrl {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  width: fit-content;
+  border-radius: 2px;
+}
+.qty-ctrl button {
+  background: none;
+  border: none;
+  width: 28px;
+  height: 28px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: var(--color-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qty-ctrl button:hover {
+  color: var(--color-accent);
+}
+.qty-ctrl span {
+  width: 32px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Cart Remove Button */
+.remove-cart-item {
+  font-size: 0.7rem;
+  color: var(--color-foreground-light);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.remove-cart-item:hover {
+  color: var(--color-accent);
+}
+
+
 

@@ -115,6 +115,31 @@ test('Visual QA and Screenshot Verification', async ({ page }) => {
   await page.waitForTimeout(500);
   await expect(authOverlay).not.toHaveClass(/open/);
 
+  // Test Shopping Cart Flow
+  console.log('Testing shopping cart flow...');
+  const addToCartBtn = page.locator('.add-to-cart-btn').first();
+  await addToCartBtn.click();
+  await page.waitForTimeout(500);
+  
+  const cartOverlay = page.locator('#cart-drawer-overlay');
+  await expect(cartOverlay).toHaveClass(/open/);
+
+  const cartTotalQty = page.locator('#cart-total-qty');
+  await expect(cartTotalQty).toContainText('1');
+
+  // Open Checkout View
+  const checkoutBtn = page.locator('#cart-checkout-btn');
+  await checkoutBtn.click();
+  await page.waitForTimeout(500);
+  const checkoutView = page.locator('#cart-checkout-view');
+  await expect(checkoutView).not.toHaveClass(/hidden/);
+
+  // Close Cart Drawer
+  const closeCart = page.locator('#close-cart');
+  await closeCart.click();
+  await page.waitForTimeout(500);
+  await expect(cartOverlay).not.toHaveClass(/open/);
+
   // Test mobile menu
   console.log('Testing mobile hamburger menu...');
   await page.setViewportSize({ width: 390, height: 844 });

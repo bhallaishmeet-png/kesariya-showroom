@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Kesariya Saree Showroom</title>
+  
+  <!-- Tailwind CSS & Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pink: {
+              light: '#f783ac',
+              DEFAULT: '#eb1472',
+              dark: '#c20e5d',
+            },
+            charcoal: {
+              light: 'rgba(18, 18, 18, 0.75)',
+              DEFAULT: '#121212',
+              dark: '#000000',
+            },
+            gray: {
+              light: '#f9f9f9',
+              DEFAULT: '#f3f3f3',
+              dark: '#e5e5e5',
+            }
+          },
+          fontFamily: {
+            sans: ['"Assistant"', '"Jost"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Fonts Import -->
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Local Custom CSS overrides (reusing root classes) -->
+  <link rel="stylesheet" href="../styles.css">
+  
+  <style>
+    body {
+      font-family: 'Assistant', 'Jost', sans-serif;
+      letter-spacing: 0.04em;
+    }
+    .admin-sidebar-item.active {
+      background-color: #f3f3f3;
+      border-left: 4px solid #eb1472;
+      color: #eb1472;
+      font-weight: 700;
+    }
+    .flat-input {
+      border: 1px solid #e5e5e5;
+      padding: 0.75rem;
+      width: 100%;
+      border-radius: 0px;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .flat-input:focus {
+      border-color: #eb1472;
+    }
+    /* Hide scrollbars for charts */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-white text-charcoal flex min-h-screen antialiased">
+
+  <!-- 1. LOADING OVERLAY (Auth Verification) -->
+  <div id="auth-loading-overlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4">
+    <div class="animate-spin text-pink text-4xl">
+      <i class="fa-solid fa-circle-notch"></i>
+    </div>
+    <p class="text-xs uppercase tracking-widest text-charcoal font-bold">Verifying Administrator Access...</p>
+    <div id="auth-denied-message" class="hidden text-center text-red-600 max-w-sm px-4">
+      <i class="fa-solid fa-circle-xmark text-4xl mb-2 text-pink"></i>
+      <p class="font-bold text-sm">Access Denied</p>
+      <p class="text-xs text-charcoal-light mt-1">You are not authorized to access this panel. Redirecting to home page...</p>
+    </div>
+  </div>
+
+  <!-- MAIN WRAPPER (revealed after auth check) -->
+  <div id="admin-dashboard-layout" class="hidden w-full flex flex-col md:flex-row">
+
+    <!-- 2. SIDEBAR -->
+    <aside class="w-full md:w-64 bg-white border-r border-gray flex flex-col justify-between py-6">
+      <div>
+        <!-- Dashboard Branding -->
+        <div class="px-6 pb-6 border-b border-gray flex justify-between items-center">
+          <a href="../" class="flex flex-col group">
+            <span class="font-extrabold text-lg tracking-[0.2em] text-charcoal uppercase leading-none">KESARIYA</span>
+            <span class="text-[9px] tracking-[0.3em] text-pink font-semibold leading-normal mt-1">ADMIN PORTAL</span>
+          </a>
+        </div>
+
+        <!-- Navigation Menu items -->
+        <nav class="mt-6 flex flex-col space-y-1">
+          <button data-tab="dashboard" class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left active">
+            <i class="fa-solid fa-chart-line w-5 text-base"></i>
+            <span>DASHBOARD</span>
+          </button>
+          
+          <button data-tab="products" class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left">
+            <i class="fa-solid fa-boxes-stacked w-5 text-base"></i>
+            <span>PRODUCTS</span>
+          </button>
+
+          <button data-tab="orders" class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left">
+            <i class="fa-solid fa-cart-shopping w-5 text-base"></i>
+            <span>ORDERS</span>
+          </button>
+
+          <button data-tab="customers" class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left">
+            <i class="fa-solid fa-users w-5 text-base"></i>
+            <span>CUSTOMERS</span>
+          </button>
+
+          <button data-tab="loginLogs" class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left">
+            <i class="fa-solid fa-clock-rotate-left w-5 text-base"></i>
+            <span>LOGIN ACTIVITY</span>
+          </button>
+
+          <!-- Admins tab (Only visible to Owner) -->
+          <a href="admins/index.html" id="sidebar-admins-tab" class="hidden flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left">
+            <i class="fa-solid fa-user-shield w-5 text-base"></i>
+            <span>ADMINS</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Sidebar Footer (Profile / Logout) -->
+      <div class="px-6 border-t border-gray pt-6 space-y-4">
+        <div class="flex items-center space-x-3 text-xs">
+          <div class="w-8 h-8 rounded-full bg-pink/10 text-pink flex items-center justify-center font-bold">
+            <span id="admin-initials">A</span>
+          </div>
+          <div>
+            <p id="admin-name-display" class="font-bold text-charcoal leading-none">Admin User</p>
+            <p id="admin-role-badge" class="text-[9px] uppercase font-bold text-pink mt-1 tracking-widest">Admin</p>
+          </div>
+        </div>
+        
+        <button id="admin-logout-btn" class="w-full btn-pill btn-pill-outline py-2.5 text-xs">
+          LOG OUT
+        </button>
+      </div>
+    </aside>
+
+    <!-- 3. MAIN DASHBOARD CONTENT -->
+    <main class="flex-grow bg-white p-6 md:p-10 min-h-screen flex flex-col justify-between">
+      
+      <!-- TAB 1: OVERVIEW DASHBOARD -->
+      <div id="tab-dashboard" class="admin-tab-view space-y-8">
+        <div class="flex justify-between items-center border-b border-gray pb-4">
+          <h2 class="text-xl md:text-2xl font-bold uppercase tracking-wider text-charcoal">Overview Metrics</h2>
+          <span class="text-xs text-charcoal-light">Real-time sync</span>
+        </div>
+
+        <!-- Metric Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="border border-gray p-6 bg-white space-y-2">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-charcoal-light">Total Sales</span>
+            <h3 id="stat-total-sales" class="text-2xl font-black text-charcoal">₹0</h3>
+            <span class="text-[9px] text-green-600 font-bold uppercase"><i class="fa-solid fa-arrow-trend-up"></i> Direct Web checkout</span>
+          </div>
+
+          <div class="border border-gray p-6 bg-white space-y-2">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-charcoal-light">Orders Placed</span>
+            <h3 id="stat-total-orders" class="text-2xl font-black text-charcoal">0</h3>
+            <span class="text-[9px] text-pink font-bold uppercase">Pending confirmation</span>
+          </div>
+
+          <div class="border border-gray p-6 bg-white space-y-2">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-charcoal-light">Products Count</span>
+            <h3 id="stat-total-products" class="text-2xl font-black text-charcoal">0</h3>
+            <span class="text-[9px] text-charcoal-light uppercase">Listed in Catalog</span>
+          </div>
+
+          <div class="border border-gray p-6 bg-white space-y-2">
+            <span class="text-[10px] uppercase font-bold tracking-widest text-charcoal-light">Customers Profiled</span>
+            <h3 id="stat-total-customers" class="text-2xl font-black text-charcoal">0</h3>
+            <span class="text-[9px] text-green-600 font-bold uppercase">Registered users</span>
+          </div>
+        </div>
+
+        <!-- Latest Orders Section -->
+        <div class="border border-gray bg-white p-6 space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal">Recent Checkout Orders</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="border-b border-gray text-[10px] uppercase tracking-wider text-charcoal-light bg-gray-light">
+                  <th class="p-3">Order ID</th>
+                  <th class="p-3">Customer</th>
+                  <th class="p-3">Products</th>
+                  <th class="p-3">Date</th>
+                  <th class="p-3 text-right">Amount</th>
+                  <th class="p-3">Status</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-recent-orders-list">
+                <!-- dynamic rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: PRODUCTS CRUD MANAGEMENT -->
+      <div id="tab-products" class="admin-tab-view hidden space-y-6">
+        <div class="flex justify-between items-center border-b border-gray pb-4">
+          <h2 class="text-xl md:text-2xl font-bold uppercase tracking-wider text-charcoal">Manage Products</h2>
+          <button id="add-product-btn" class="btn-pill btn-pill-primary py-2 px-6 text-xs flex items-center space-x-1">
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>ADD PRODUCT</span>
+          </button>
+        </div>
+
+        <!-- Products List Grid -->
+        <div class="overflow-x-auto border border-gray bg-white">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-gray text-[10px] uppercase tracking-wider text-charcoal-light bg-gray-light">
+                <th class="p-4 w-20">Cover</th>
+                <th class="p-4">Name</th>
+                <th class="p-4">Category</th>
+                <th class="p-4">Price</th>
+                <th class="p-4">Stock</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- dynamic list -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: ORDERS LIST & UPDATE -->
+      <div id="tab-orders" class="admin-tab-view hidden space-y-6">
+        <div class="flex justify-between items-center border-b border-gray pb-4">
+          <h2 class="text-xl md:text-2xl font-bold uppercase tracking-wider text-charcoal">Checkout Orders</h2>
+          <div class="flex space-x-2">
+            <select id="orders-filter-status" class="flat-input py-1.5 px-3 text-xs w-40 bg-white">
+              <option value="all">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-gray bg-white">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-gray text-[10px] uppercase tracking-wider text-charcoal-light bg-gray-light">
+                <th class="p-4">Order ID</th>
+                <th class="p-4">Customer Details</th>
+                <th class="p-4">Items Summary</th>
+                <th class="p-4">Address</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <!-- Dynamic orders list -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: CUSTOMERS MANAGEMENT -->
+      <div id="tab-customers" class="admin-tab-view hidden space-y-6">
+        <div class="flex justify-between items-center border-b border-gray pb-4">
+          <h2 class="text-xl md:text-2xl font-bold uppercase tracking-wider text-charcoal">Customers List</h2>
+          <input type="text" id="customers-search-input" placeholder="Search customer by name/email/phone..." class="flat-input py-1.5 px-3 text-xs w-64 bg-white">
+        </div>
+
+        <div class="overflow-x-auto border border-gray bg-white">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-gray text-[10px] uppercase tracking-wider text-charcoal-light bg-gray-light">
+                <th class="p-4">Photo</th>
+                <th class="p-4">Name</th>
+                <th class="p-4">Email</th>
+                <th class="p-4">Phone</th>
+                <th class="p-4">Signup Date</th>
+                <th class="p-4 text-right">Details</th>
+              </tr>
+            </thead>
+            <tbody id="customers-table-body">
+              <!-- dynamic list -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 5: LOGIN LOGS searchable table -->
+      <div id="tab-loginLogs" class="admin-tab-view hidden space-y-6">
+        <div class="flex justify-between items-center border-b border-gray pb-4">
+          <h2 class="text-xl md:text-2xl font-bold uppercase tracking-wider text-charcoal">Login Activity Logs</h2>
+          <input type="text" id="logs-search-input" placeholder="Search logs by email, device or platform..." class="flat-input py-1.5 px-3 text-xs w-72 bg-white">
+        </div>
+
+        <div class="overflow-x-auto border border-gray bg-white">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-gray text-[10px] uppercase tracking-wider text-charcoal-light bg-gray-light">
+                <th class="p-4">Email</th>
+                <th class="p-4">Platform / OS</th>
+                <th class="p-4">Browser</th>
+                <th class="p-4">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="logs-table-body">
+              <!-- dynamic logs -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="border-t border-gray pt-6 mt-12 text-[10px] text-charcoal-light flex justify-between items-center">
+        <p>&copy; 2026 Kesariya Saree Showroom. Secure Admin Portal.</p>
+        <span>Role claims protection active</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- PRODUCT ADD/EDIT MODAL OVERLAY -->
+  <div id="product-modal-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white border border-gray w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl flex flex-col space-y-6">
+      <div class="flex justify-between items-center border-b border-gray pb-3">
+        <h3 id="product-modal-title" class="text-lg font-bold uppercase tracking-wider text-charcoal">Add Product</h3>
+        <button id="close-product-modal" class="text-charcoal hover:text-pink text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="product-modal-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-2.5 rounded text-center"></div>
+
+      <form id="product-form" class="space-y-4">
+        <input type="hidden" id="edit-product-id">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col">
+            <label for="product-name" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Product Name *</label>
+            <input type="text" id="product-name" required placeholder="e.g. Classic Silk Saree" class="flat-input text-charcoal">
+          </div>
+          <div class="flex flex-col">
+            <label for="product-category" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Category *</label>
+            <select id="product-category" required class="flat-input text-charcoal bg-white">
+              <option value="Sarees">Sarees</option>
+              <option value="Suits">Suits</option>
+              <option value="Fabrics">Fabrics</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="product-desc" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Description *</label>
+          <textarea id="product-desc" required rows="3" placeholder="Enter product detailed specifications..." class="flat-input text-charcoal resize-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col">
+            <label for="product-price" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Price (₹) *</label>
+            <input type="number" id="product-price" required placeholder="e.g. 3500" class="flat-input text-charcoal">
+          </div>
+          <div class="flex flex-col">
+            <label for="product-stock" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Stock Level *</label>
+            <input type="number" id="product-stock" required placeholder="e.g. 50" class="flat-input text-charcoal">
+          </div>
+        </div>
+
+        <!-- Image Upload controls -->
+        <div class="border-t border-gray pt-4 space-y-4">
+          <h4 class="text-[11px] uppercase tracking-wider font-bold text-charcoal">Product Images Management</h4>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+            <div class="flex flex-col">
+              <label class="text-[10px] uppercase font-semibold text-charcoal-light mb-1">Upload Gallery Image</label>
+              <input type="file" id="product-image-file" accept="image/*" class="text-xs text-charcoal-light">
+            </div>
+            <button type="button" id="upload-image-btn" class="btn-pill btn-pill-outline py-2 text-xs flex items-center justify-center space-x-1 w-full bg-white">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <span>UPLOAD & ADD TO GALLERY</span>
+            </button>
+          </div>
+
+          <!-- Gallery List Grid -->
+          <div id="modal-image-gallery" class="grid grid-cols-4 gap-3 bg-gray-light border border-gray p-3 overflow-x-auto min-h-[100px] items-center">
+            <!-- uploaded image bubbles with remove buttons -->
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-4 border-t border-gray">
+          <button type="button" id="cancel-product-modal" class="btn-pill btn-pill-outline py-2.5 px-6 text-xs uppercase bg-white">Cancel</button>
+          <button type="submit" class="btn-pill btn-pill-primary py-2.5 px-6 text-xs uppercase">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CUSTOMER DETAILS POPUP MODAL -->
+  <div id="customer-details-overlay" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white border border-gray w-full max-w-xl p-6 md:p-8 shadow-2xl flex flex-col space-y-6">
+      <div class="flex justify-between items-center border-b border-gray pb-3">
+        <h3 class="text-lg font-bold uppercase tracking-wider text-charcoal">Customer Profile Details</h3>
+        <button id="close-customer-details" class="text-charcoal hover:text-pink text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <div class="w-16 h-16 rounded-full bg-pink/10 text-pink text-2xl flex items-center justify-center font-bold">
+          <span id="cust-modal-initials">C</span>
+        </div>
+        <div>
+          <h4 id="cust-modal-name" class="font-bold text-base text-charcoal">Customer Name</h4>
+          <p id="cust-modal-email" class="text-xs text-charcoal-light">customer@example.com</p>
+          <p id="cust-modal-phone" class="text-xs text-charcoal-light mt-1">Phone: --</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 border-t border-b border-gray py-4 text-xs">
+        <div>
+          <span class="text-[9px] uppercase tracking-widest text-charcoal-light block">Total Orders</span>
+          <strong id="cust-modal-orders" class="text-base text-charcoal">0</strong>
+        </div>
+        <div>
+          <span class="text-[9px] uppercase tracking-widest text-charcoal-light block">Total Spent</span>
+          <strong id="cust-modal-spent" class="text-base text-charcoal">₹0</strong>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal">Previous Orders</h4>
+        <div class="max-h-[200px] overflow-y-auto space-y-2 pr-1" id="cust-modal-orders-list">
+          <!-- dyn list -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Compat App, Auth, Firestore, Storage & Functions libraries -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-functions-compat.js"></script>
+
+  <!-- Dashboard custom JS logic -->
+  <script src="admin.js"></script>
+</body>
+</html>

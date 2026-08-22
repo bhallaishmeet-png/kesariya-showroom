@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Admins | Owner Portal | Kesariya Saree Showroom</title>
+  
+  <!-- Tailwind CSS & Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pink: {
+              light: '#f783ac',
+              DEFAULT: '#eb1472',
+              dark: '#c20e5d',
+            },
+            charcoal: {
+              light: 'rgba(18, 18, 18, 0.75)',
+              DEFAULT: '#121212',
+              dark: '#000000',
+            },
+            gray: {
+              light: '#f9f9f9',
+              DEFAULT: '#f3f3f3',
+              dark: '#e5e5e5',
+            }
+          },
+          fontFamily: {
+            sans: ['"Assistant"', '"Jost"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700;800&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  
+  <style>
+    body {
+      font-family: 'Assistant', 'Jost', sans-serif;
+      letter-spacing: 0.04em;
+    }
+    .admin-sidebar-item.active {
+      background-color: #f3f3f3;
+      border-left: 4px solid #eb1472;
+      color: #eb1472;
+      font-weight: 700;
+    }
+    .flat-input {
+      border: 1px solid #e5e5e5;
+      padding: 0.75rem;
+      width: 100%;
+      border-radius: 0px;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .flat-input:focus {
+      border-color: #eb1472;
+    }
+  </style>
+</head>
+<body class="bg-white text-charcoal flex min-h-screen antialiased">
+
+  <!-- 1. LOADING OVERLAY (Owner Auth Verification) -->
+  <div id="auth-loading-overlay" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-4">
+    <div class="animate-spin text-pink text-4xl">
+      <i class="fa-solid fa-circle-notch"></i>
+    </div>
+    <p class="text-xs uppercase tracking-widest text-charcoal font-bold">Verifying Owner Credentials...</p>
+    <div id="auth-denied-message" class="hidden text-center text-red-600 max-w-sm px-4">
+      <i class="fa-solid fa-shield-halved text-4xl mb-2 text-pink"></i>
+      <p class="font-bold text-sm">Access Denied</p>
+      <p class="text-xs text-charcoal-light mt-1">This panel is restricted exclusively to the Owner. Redirecting to Admin dashboard...</p>
+    </div>
+  </div>
+
+  <!-- MAIN WRAPPER (revealed after Owner auth check) -->
+  <div id="admin-dashboard-layout" class="hidden w-full flex flex-col md:flex-row">
+
+    <!-- 2. SIDEBAR -->
+    <aside class="w-full md:w-64 bg-white border-r border-gray flex flex-col justify-between py-6">
+      <div>
+        <div class="px-6 pb-6 border-b border-gray flex justify-between items-center">
+          <a href="../../" class="flex flex-col group">
+            <span class="font-extrabold text-lg tracking-[0.2em] text-charcoal uppercase leading-none">KESARIYA</span>
+            <span class="text-[9px] tracking-[0.3em] text-pink font-semibold leading-normal mt-1">OWNER PORTAL</span>
+          </a>
+        </div>
+
+        <nav class="mt-6 flex flex-col space-y-1">
+          <a href="../index.html" class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal hover:bg-gray transition w-full text-left">
+            <i class="fa-solid fa-arrow-left w-5 text-base"></i>
+            <span>BACK TO ADMIN</span>
+          </a>
+          
+          <button class="admin-sidebar-item flex items-center space-x-3 px-6 py-3.5 text-xs font-semibold tracking-wider text-charcoal w-full text-left active">
+            <i class="fa-solid fa-user-shield w-5 text-base"></i>
+            <span>MANAGE ADMINS</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar Footer (Profile / Logout) -->
+      <div class="px-6 border-t border-gray pt-6 space-y-4">
+        <div class="flex items-center space-x-3 text-xs">
+          <div class="w-8 h-8 rounded-full bg-pink/10 text-pink flex items-center justify-center font-bold">
+            <span id="owner-initials">O</span>
+          </div>
+          <div>
+            <p id="owner-name-display" class="font-bold text-charcoal leading-none">Owner User</p>
+            <p class="text-[9px] uppercase font-bold text-pink mt-1 tracking-widest">Owner</p>
+          </div>
+        </div>
+        
+        <button id="owner-logout-btn" class="w-full btn-pill btn-pill-outline py-2.5 text-xs">
+          LOG OUT
+        </button>
+      </div>
+    </aside>
+
+    <!-- 3. MAIN CONTENT -->
+    <main class="flex-grow bg-white p-6 md:p-10 min-h-screen flex flex-col justify-between">
+      
+      <div class="space-y-6">
+        <div class="flex justify-between items-center border-b border-gray pb-4">
+          <h2 class="text-xl md:text-2xl font-bold uppercase tracking-wider text-charcoal">Admin Management</h2>
+          <button id="create-admin-btn" class="btn-pill btn-pill-primary py-2 px-6 text-xs flex items-center space-x-1">
+            <i class="fa-solid fa-user-plus text-xs"></i>
+            <span>CREATE ADMIN</span>
+          </button>
+        </div>
+
+        <!-- Admins List Grid Table -->
+        <div class="overflow-x-auto border border-gray bg-white">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-gray text-[10px] uppercase tracking-wider text-charcoal-light bg-gray-light">
+                <th class="p-4">Name</th>
+                <th class="p-4">Email</th>
+                <th class="p-4">Created Date</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admins-table-body">
+              <!-- dynamic admins list -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <footer class="border-t border-gray pt-6 mt-12 text-[10px] text-charcoal-light flex justify-between items-center">
+        <p>&copy; 2026 Kesariya Saree Showroom. Owner Admins System.</p>
+        <span>Secure Custom Claims Authorization Active</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- CREATE ADMIN MODAL OVERLAY -->
+  <div id="create-admin-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white border border-gray w-full max-w-md p-6 md:p-8 shadow-2xl flex flex-col space-y-5">
+      <div class="flex justify-between items-center border-b border-gray pb-3">
+        <h3 class="text-base font-bold uppercase tracking-wider text-charcoal">Create Admin Account</h3>
+        <button id="close-create-modal" class="text-charcoal hover:text-pink text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="create-modal-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-2.5 rounded text-center"></div>
+
+      <form id="create-admin-form" class="space-y-4">
+        <div class="flex flex-col">
+          <label for="admin-name" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Admin Name *</label>
+          <input type="text" id="admin-name" required placeholder="Enter full name" class="flat-input text-charcoal">
+        </div>
+        
+        <div class="flex flex-col">
+          <label for="admin-email" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Email Address *</label>
+          <input type="email" id="admin-email" required placeholder="admin@kesariyasaree.com" class="flat-input text-charcoal">
+        </div>
+
+        <div class="flex flex-col">
+          <label for="admin-password" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">Temporary Password *</label>
+          <input type="password" id="admin-password" required placeholder="Enter temporary password" class="flat-input text-charcoal">
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-3 border-t border-gray">
+          <button type="button" id="cancel-create-btn" class="btn-pill btn-pill-outline py-2 px-5 text-xs uppercase bg-white">Cancel</button>
+          <button type="submit" id="submit-create-btn" class="btn-pill btn-pill-primary py-2 px-5 text-xs uppercase">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PASSWORD RESET MODAL OVERLAY -->
+  <div id="reset-password-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white border border-gray w-full max-w-md p-6 md:p-8 shadow-2xl flex flex-col space-y-5">
+      <div class="flex justify-between items-center border-b border-gray pb-3">
+        <h3 class="text-base font-bold uppercase tracking-wider text-charcoal">Reset Password</h3>
+        <button id="close-reset-modal" class="text-charcoal hover:text-pink text-xl"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="reset-modal-error" class="hidden text-xs text-red-600 bg-red-50 border border-red-100 p-2.5 rounded text-center"></div>
+
+      <form id="reset-password-form" class="space-y-4">
+        <input type="hidden" id="reset-admin-uid">
+        <div class="flex flex-col">
+          <label for="new-password" class="text-[11px] uppercase tracking-wider font-semibold text-charcoal mb-2">New Password *</label>
+          <input type="password" id="new-password" required placeholder="Enter new password (min 6 chars)" class="flat-input text-charcoal">
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-3 border-t border-gray">
+          <button type="button" id="cancel-reset-btn" class="btn-pill btn-pill-outline py-2 px-5 text-xs uppercase bg-white">Cancel</button>
+          <button type="submit" class="btn-pill btn-pill-primary py-2 px-5 text-xs uppercase">Update Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Firebase Compat App, Auth, Firestore & Functions SDK libraries -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-functions-compat.js"></script>
+
+  <!-- Admins Page logic script -->
+  <script src="admins.js"></script>
+</body>
+</html>
